@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz de Segurança Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F6F9;--ink:#12213A;--mut:#55637A;--card:#fff;--line:#D5DDE8;--ok:#0B7A5A;--okbg:#DFF3EB;--no:#B4321F;--nobg:#FBE4DF;--warn:#F5B700;--btn:#12213A;--btnink:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1626;--ink:#EAF0F8;--mut:#9AA9C0;--card:#16233A;--line:#2A3A57;--ok:#4CD1A0;--okbg:#0F3A2E;--no:#FF8C79;--nobg:#4A211B;--btn:#F5B700;--btnink:#12213A}}
+:root[data-theme="dark"]{--bg:#0E1626;--ink:#EAF0F8;--mut:#9AA9C0;--card:#16233A;--line:#2A3A57;--ok:#4CD1A0;--okbg:#0F3A2E;--no:#FF8C79;--nobg:#4A211B;--btn:#F5B700;--btnink:#12213A}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:18px;line-height:1.5}
+main{max-width:640px;margin:0 auto;padding:28px 20px 56px}
+h1{font-size:clamp(2rem,7vw,3rem);line-height:1.05;font-weight:800;letter-spacing:-.02em;margin:24px 0 16px}
+h2{font-size:1.4rem;line-height:1.25;font-weight:600;margin:20px 0 16px}
+p{margin:0 0 16px}.mut{color:var(--mut)}
+.ex{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 20px}
+.exl{font-size:.85rem;color:var(--mut);margin-bottom:6px}
+.exv{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.15rem;word-break:break-all;white-space:pre-wrap}
+.hero .exv{font-size:1.6rem}.hit{border-radius:4px;padding:0 2px;transition:background .3s}
+.ex.on .hit,.hero .hit{background:var(--warn);color:#12213A}
+button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.go{background:var(--btn);color:var(--btnink);border:0;border-radius:8px;padding:12px 22px;font-weight:600}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.bar i{display:block;height:100%;background:var(--ink);transition:width .3s}
+.opt{display:block;width:100%;text-align:left;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:10px}
+.opt:hover:not(:disabled){border-color:var(--ink)}.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}.opt.no{border-color:var(--no);background:var(--nobg)}
+.fb{border-radius:10px;padding:14px 16px;margin:16px 0}.fb.ok{background:var(--okbg)}.fb.no{background:var(--nobg)}
+.fb b{display:block;margin-bottom:4px}.score{font-size:4.5rem;font-weight:800;line-height:1;margin:16px 0 8px}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+var VF=["Verdadeiro","Falso"];
+var Q=[
+{p:"Qual destas senhas é a mais fraca, mesmo parecendo forte?",ex:{l:"Opção A",s:[["Marina",1],["@",0],["1998",1],["!",0]]},o:["Marina@1998!","T9#vQ2!pL7$x","cavalo-nuvem-tijolo-sereno","Rf4!kz9Lm2"],a:0,e:"Símbolos no fim não escondem um nome e um ano. Golpistas testam justamente essas combinações, com variações comuns como @ e !."},
+{p:"Este e-mail pode ajudar alguém a adivinhar sua senha. Por quê?",ex:{l:"Endereço de e-mail",s:[["joao.silva",1],[".",0],["1998",1],["@email.com",0]]},o:["Ele mostra nome e ano de nascimento, que muita gente usa na senha","Ele tem um ponto no meio","Ele termina com @email.com","Ele não mostra nada útil"],a:0,e:"Seu e-mail circula por muitos lugares. Se ele já traz nome e ano, a senha \"joao1998\" fica fácil de chutar."},
+{p:"Você faz backup das fotos em um HD externo, mas deixa o HD sempre conectado ao computador. Qual é o problema?",o:["Nenhum, o backup está protegido","Um vírus de sequestro de arquivos pode criptografar também o backup conectado","O HD esquenta e estraga","O backup gasta a bateria do computador"],a:1,e:"Vírus de sequestro atacam tudo o que está ligado ao computador. Mantenha uma cópia desconectada ou na nuvem com histórico de versões."},
+{p:"Qual é o endereço real (o domínio) do site que este link leva?",ex:{l:"Link recebido",s:[["www.banco-seguro.com.br.",0],["confirmar-dados.net",1]]},o:["banco-seguro.com.br","confirmar-dados.net","www","banco-seguro"],a:1,e:"O domínio verdadeiro é o trecho logo antes da última extensão (.net). O que vem antes é livre para o golpista escrever, por isso ele coloca o nome do banco ali."},
+{p:"Qual forma de verificação em duas etapas é a mais segura?",o:["Código por SMS","Aplicativo autenticador ou chave de segurança","Pergunta secreta, como o nome do primeiro bicho de estimação","Código enviado ao próprio e-mail"],a:1,e:"O SMS pode ser desviado com a clonagem do chip, e respostas de perguntas secretas podem ser descobertas em redes sociais. Um app autenticador ou uma chave física é bem mais difícil de burlar."},
+{p:"A aba anônima do navegador impede que o site e o provedor de internet vejam o que você acessa.",vf:1,a:1,e:"A aba anônima só evita que o histórico fique salvo no seu aparelho. O site, o provedor e quem administra a rede continuam vendo seu acesso."},
+{p:"No aeroporto aparecem duas redes de Wi-Fi: \"Aeroporto_Wifi\" e \"Aeroporto_Wifi_Free\". Qual é o maior risco?",o:["Nenhum, as duas são do aeroporto","Uma delas pode ser uma rede falsa criada para espionar quem se conecta","A mais lenta é a perigosa","Só redes com senha podem ser falsas"],a:1,e:"Golpistas criam redes com nomes parecidos para interceptar o que você digita. Confirme o nome exato com a equipe do local ou use os dados móveis."},
+{p:"Um adesivo com QR code colado em um poste promete desconto no estacionamento. O que fazer?",o:["Escanear e pagar, o desconto vale a pena","Desconfiar: o adesivo pode ter sido colado por cima do original. Use o canal oficial","Escanear só para ver e não digitar nada","Compartilhar com os amigos"],a:1,e:"Golpistas colam QR codes falsos sobre os verdadeiros. O QR code leva a páginas de pagamento falsas, então prefira o aplicativo ou site oficial do serviço."},
+{p:"Quem tem antivírus instalado não precisa se preocupar tanto com links e anexos suspeitos.",vf:1,a:1,e:"O antivírus ajuda, mas não pega tudo, principalmente golpes que enganam a pessoa em vez de o aparelho. O maior alvo é o seu clique."},
+{p:"Alguém liga dizendo ser do seu banco e pede que você instale um aplicativo de acesso remoto para cancelar uma compra suspeita. O que isso é?",o:["Um procedimento normal de segurança bancária","Um golpe: o acesso remoto deixa o golpista controlar seu celular e fazer transferências","Só é golpe se cobrarem alguma taxa","É seguro se o número que ligou for o do banco"],a:1,e:"Bancos não pedem esse tipo de instalação. E o número que aparece na tela pode ser falsificado, então desligue e ligue para o telefone que está no cartão."},
+{p:"Receber um código de verificação que você não pediu pode indicar que alguém está tentando entrar na sua conta e já sabe a sua senha.",vf:0,a:0,e:"Esse código é a segunda barreira. Se ele chegou sem você pedir, troque a senha na hora e revise os acessos recentes da conta."},
+{p:"Você descobre que sua senha apareceu em um vazamento de dados. Qual é a atitude mais eficaz?",o:["Esperar para ver se acontece alguma coisa","Trocar a senha nesse serviço e em todos onde ela foi usada, e ativar a verificação em duas etapas","Apagar a conta de e-mail","Só mudar o final da senha, como Senha1 para Senha2"],a:1,e:"Golpistas testam a senha vazada em vários serviços. Pequenas variações, como mudar um número no final, são as primeiras que eles tentam."}
+];
+var app=document.getElementById("app"),i=0,score=0;
+function el(t,c,x){var n=document.createElement(t);if(c)n.className=c;if(x!=null)n.textContent=x;return n}
+function box(ex,cls){var b=el("div","ex "+(cls||"")),v=el("div","exv");b.appendChild(el("div","exl",ex.l));ex.s.forEach(function(s){v.appendChild(el("span",s[1]?"hit":"",s[0]))});b.appendChild(v);return b}
+function intro(){
+app.innerHTML="";i=0;score=0;Q.sort(function(){return Math.random()-.5});
+app.appendChild(el("p","mut","Quiz de segurança digital"));
+var h=el("div","hero");h.appendChild(box({l:"Uma senha que muita gente usa",s:[["Marina",1],["1998",1]]},"on"));app.appendChild(h);
+app.appendChild(el("h1","","Quanto você sabe sobre segurança digital?"));
+app.appendChild(el("p","mut","São "+Q.length+" perguntas rápidas, de verdadeiro ou falso e de alternativas. Não precisa entender de tecnologia."));
+var b=el("button","go","Começar o quiz");b.onclick=show;app.appendChild(b);
+}
+function show(){
+app.innerHTML="";var q=Q[i];
+var bar=el("div","bar"),f=el("i");f.style.width=(i/Q.length*100)+"%";bar.appendChild(f);app.appendChild(bar);
+app.appendChild(el("p","mut","Pergunta "+(i+1)+" de "+Q.length));
+app.appendChild(el("h2","",q.p));
+var ex=null;if(q.ex){ex=box(q.ex);app.appendChild(ex)}
+var opts=q.o||VF,btns=[],fb=el("div");fb.setAttribute("aria-live","polite");
+opts.forEach(function(t,k){var b=el("button","opt",t);b.onclick=function(){
+btns.forEach(function(x){x.disabled=true});
+var right=k===q.a;if(right)score++;
+btns[q.a].classList.add("ok");if(!right)b.classList.add("no");
+if(ex)ex.classList.add("on");
+var m=el("div","fb "+(right?"ok":"no"));m.appendChild(el("b","",right?"Correto!":"Não foi dessa vez."));m.appendChild(el("span","",q.e));
+fb.appendChild(m);
+var n=el("button","go",i<Q.length-1?"Próxima pergunta":"Ver resultado");n.onclick=function(){i++;i<Q.length?show():end()};fb.appendChild(n);n.focus();
+};btns.push(b);app.appendChild(b)});
+app.appendChild(fb);
+}
+function end(){
+app.innerHTML="";
+var msg=score>=10?"Você está muito bem protegido. Compartilhe o quiz com quem ainda cai nesses golpes.":score>=7?"Bom caminho. Revise as perguntas que errou e você fecha as brechas que sobraram.":"Ainda dá para melhorar, e o primeiro passo é saber onde estão os riscos. Tente de novo.";
+app.appendChild(el("p","mut","Seu resultado"));
+app.appendChild(el("div","score",score+"/"+Q.length));
+app.appendChild(el("h2","",msg));
+app.appendChild(el("p","mut","Para começar hoje: use uma senha diferente em cada conta, ative a verificação em duas etapas e nunca passe códigos recebidos por SMS."));
+var b=el("button","go","Refazer o quiz");b.onclick=intro;app.appendChild(b);
+}
+intro();
+</script>
+</body>
+</html>
